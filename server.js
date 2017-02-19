@@ -9,4 +9,17 @@ app.get('/', (req, res, next) => {
 
 app.use(express.static('public'));
 
+io.on('connection', (client) => {
+	console.log('Client connected.');
+
+	client.on('join', (data) => {
+		console.log(data);
+	});
+
+	client.on('messages', (data) => {
+		client.emit('thread', data);
+		client.broadcast.emit('thread', data);
+	});
+});
+
 server.listen(7777);
